@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="darkteal">MonitorMe Details</h2>
+<div class="needsleft">
+    <h3 class="darkteal">{{tracker.name}}
+        <br>
+        <span><a href="{% url 'tracker-all-detail' tracker.pk%}" class="medfont purple">See more</a></span>
+        <br>
+        <span class="medfont helptext">Select question to edit</span>
+    </h3>
+    
+    {% for question in tracker.questions.all %}
+    <div class="marginbottom">
+        <a class="darkteal" href="{% url 'question-detail' question.pk %}">{{question}}</a> 
+    </div>
+
+    {% endfor %}
+
+    <div class="addquestion">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="login-row">
+                    <span class="formline purple">{{ form.question_description.label_tag}}</span>
+                    <span>{{ form.question_description }}</span>
+                </div>
+                <div class="login-row">
+                    <span class="formline purple">{{ form.answer_name1.label_tag}}</span>
+                    <span>{{ form.answer_name1 }}</span>
+                </div>
+                <div class="login-row">
+                    <span class="formline purple">{{ form.answer_name2.label_tag}}</span>
+                    <span>{{ form.answer_name2 }}</span>
+                </div>
+                <div class="login-row">
+                    <span class="formline purple">{{ form.answer_name3.label_tag}}</span>
+                    <span>{{ form.answer_name3 }}</span>
+                </div>
+            <div class="needscenter">
+                <button class="add-tracker" type="Submit">
+                    Save Question
+                </button>
+            </div>
+        </form>  
+        <div class="needscenter done">
+            <a href="{% url 'index' %}">
+                <button class="tracker-button button2"> 
+                    Done
+                </button>
+            </a>  
+        </div>
+        <div class="needscenter done">
+            <a href="{% url 'tracker-delete' tracker.pk %}">
+                <button class="delete button2"> 
+                    Delete List
+                </button>
+            </a>  
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% comment %}
+    - <a href="{% url 'answer-create' %}">
+        <button class="add-tracker">Add Answer</button>
+    </a>
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ answer_form.as_p }}
+        <button class="surveybutton" type="Submit">Add Answer</button>
+    </form>
+{% endcomment %}

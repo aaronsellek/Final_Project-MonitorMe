@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load core_tags %}
+
+{% block content %}
+<details class="needsleft">
+<summary class="darkpurple needscenter largefont">Summary</summary>
+<p>As a simple summary, we are showing you how many times you have used the list in the current month, the last 30 days, and which one is used the most. To see the details of the list, simply click the name in the first column.</p>
+</details>
+
+<div>
+    <table class="report-table">
+        <thead>
+            <tr class="bolder">
+                <th class="trackername tableheader">Details</th>
+                <th class="column tableheader">MTD</th>
+                <th class="column tableheader">Last 30 Days</th>
+                <th class="column tableheader">Most Used</th>
+            </tr>
+        </thead>
+        {% if trackers %}
+            {% for tracker in trackers %}
+            <tbody>
+                <tr class="marginbottom needscenter">
+                    <td class="needsleft trackername">
+                        <a href="{% url 'tracker-detail' tracker.pk %}">
+                        {{tracker}}
+                        </a>
+                    </td>
+                    <td class="column">
+                        {% currentMonthCount tracker.pk request.user %}
+                    </td>
+                    <td class="column">
+                        {% thirtyDayCount tracker.pk request.user %}
+                    </td>
+                    <td class="column purple">
+                        {% averageOfDays tracker.pk request.user %}%
+                    </td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        {% endif %}
+    </table>
+</div>
+
+<div>
+<details class="needsleft">
+<summary class="darkpurple needscenter largefont">History</summary>
+<p>The history section is for you to see all of your responses to the MonitorMe lists you have created. You can even select the link in the first column to go back and review them later.</p>
+</details>
+<div class="history">
+    <table class="history">
+        <thead>
+            <tr class="bolder">
+                <th class="trackername tableheader">Response</th>
+                <th class="column tableheader">Date</th>
+            </tr>
+        </thead>
+        {% if tracker_instances %}
+        {% for instance in tracker_instances %}
+        <tbody>
+            <tr class="marginbottom needscenter">
+                <td class="instance needsleft">
+                    <a href="{% url 'response_detail2' instance.pk %}">
+                    {{instance}}
+                    </a>
+                </td>
+                <td class="date_instance helptext needscenter">{{instance.started_at}}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    {% endif %}
+    </table>
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if tracker_instances.has_previous %}
+            <span>
+            <a href="?page=1"><i class="far fa-angle-double-left"></i></a>
+            </span>
+            <span class="left">
+            <a href="?page={{ tracker_instances.previous_page_number }}"><i class="far fa-angle-left"></i></a>
+            </span>
+        {% endif %}
+
+        <span class="current">
+            <span class="left">
+            Page {{ tracker_instances.number }} of {{ tracker_instances.paginator.num_pages }}
+            </span>
+        </span>
+
+        {% if tracker_instances.has_next %}
+            <span class="left">
+            <a href="?page={{ tracker_instances.next_page_number }}"><i class="far fa-angle-right"></i></a>
+            </span>
+            <span class="left">
+            <a href="?page={{ tracker_instances.paginator.num_pages }}"><i class="far fa-angle-double-right"></i></a>
+            </span>
+        {% endif %}
+    </span>
+</div>
+
+</div>
+    
+
+
+{% endblock %}

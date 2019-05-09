@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="needsleft">
+<h3 class="darkteal"><a href="{{answer.question.tracker.get_absolute_url}}">{{answer.question.tracker}}</a></h3>
+<div class="formline">
+    {{answer.question.current_question}}
+</div>
+
+<p class="helptext">Enter new answer</p>
+<form method="POST" action="">
+    {% csrf_token %}
+    <div>
+            <div class="login-row">
+                <span>
+                    {{ form.current_answer.label_tag }}
+                </span>
+                <span class="noborder">
+                    {{ form.current_answer }}
+                </span>
+            </div>
+        </div> 
+<div class="needscenter">
+    <button class="tracker-button button2"> 
+        Submit
+    </button>
+</div>
+</form>
+<div class="needscenter done">
+    <a href="{% url 'delete-answer' answer.pk %}">
+        <button class="delete button2"> 
+            Delete Answer
+        </button>
+    </a>  
+</div>
+<div class="needscenter done">
+    <a href="{% url 'answer-detail' answer.pk %}">
+        <button class="cancel button2"> 
+            Cancel
+        </button>
+    </a>  
+</div>
+</div>
+
+{% endblock %}
